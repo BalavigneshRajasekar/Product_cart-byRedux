@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import userContext from "./UserContext";
 import {
@@ -13,8 +14,12 @@ import {
   Divider,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
+import { addItem } from "./createSlice";
 
 function Card() {
+  const state = useSelector((value) => value.counter.items);
+  const dispatch = useDispatch();
+
   const { items, setItems, stock, setTotalPrice } = useContext(userContext);
   //Images which are provided in data its not working that y used custom images
   const customImages = [
@@ -34,6 +39,8 @@ function Card() {
       return value;
     });
     setItems(updatedPrice);
+    console.log(state);
+    dispatch(addItem(updatedPrice));
 
     //This Logic will help us to add the Total value of already existing cart and new increased quantity
     let total = updatedPrice.map((value, i) => {
