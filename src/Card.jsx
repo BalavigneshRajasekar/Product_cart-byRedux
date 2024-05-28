@@ -14,7 +14,7 @@ import {
   Divider,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
-import { addItem, price } from "./createSlice";
+import { addItem, price, removeStock } from "./createSlice";
 
 function Card() {
   //State values from the store
@@ -45,6 +45,7 @@ function Card() {
 
     console.log(items);
     dispatch(addItem(updatedPrice));
+    dispatch(removeStock(e, id, eachPrice, index));
 
     //This Logic will help us to add the Total value of already existing cart and new increased quantity
     let total = updatedPrice.map((value, i) => {
@@ -54,8 +55,7 @@ function Card() {
       return value.subTotal ? value.subTotal : value.price;
     });
 
-    //TotalPrice
-    dispatch(price(total.reduce((x, y) => x + y)));
+    dispatch(price(total.reduce((x, y) => x + y))); //TotalPrice
     console.log(totalPrice);
   };
 

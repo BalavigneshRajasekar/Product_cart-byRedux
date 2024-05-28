@@ -27,9 +27,7 @@ const dataProvider = createSlice({
       state.stocks.push(action.payload);
     },
     removeStock: (state, action) => {
-      state.stocks = state.stocks.filter(
-        (stock) => stock.id !== action.payload.id
-      );
+      console.log(action);
     },
   },
 });
