@@ -1,8 +1,8 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
-import { useContext } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
 
-import userContext from "./UserContext";
 import {
   CardActions,
   CardContent,
@@ -14,13 +14,14 @@ import {
   Divider,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
-import { addItem } from "./createSlice";
+import { addItem, price } from "./createSlice";
 
 function Card() {
-  const state = useSelector((value) => value.counter.items);
+  const state = useSelector((value) => value.store.items);
+  const state1 = useSelector((value) => value.store.totalPrice);
+  const state3 = useSelector((value) => value.store.stocks);
   const dispatch = useDispatch();
 
-  const { items, setItems, stock, setTotalPrice } = useContext(userContext);
   //Images which are provided in data its not working that y used custom images
   const customImages = [
     "iphone.jpg",
@@ -32,13 +33,13 @@ function Card() {
 
   const handleChange = (e, id, eachPrice, index) => {
     //This Logic will help us to add the Subtotal value to the object
-    let updatedPrice = items.map((value) => {
+    let updatedPrice = state.map((value) => {
       if (value.id == id) {
         return { ...value, ["subTotal"]: e.target.value * eachPrice };
       }
       return value;
     });
-    setItems(updatedPrice);
+
     console.log(state);
     dispatch(addItem(updatedPrice));
 
@@ -50,15 +51,18 @@ function Card() {
       return value.subTotal ? value.subTotal : value.price;
     });
 
-    setTotalPrice(total.reduce((x, y) => x + y)); //TotalPrice
+    //TotalPrice
+    dispatch(price(total.reduce((x, y) => x + y)));
+    console.log(state1);
   };
 
   const handleRemove = (id) => {
     //Remove the cart based on the ID
-    setItems(items.filter((f) => f.id !== id));
+
+    dispatch(addItem(state.filter((f) => f.id !== id)));
 
     // This logic is help us to handle the TotalPrice after cart is removed
-    let deletedValue = items.map((value) => {
+    let deletedValue = state.map((value) => {
       if (value.id == id) {
         return 0;
       }
@@ -72,7 +76,7 @@ function Card() {
         : value.price;
     });
 
-    setTotalPrice(deletedValue.reduce((x, y) => x + y));
+    dispatch(price(deletedValue.reduce((x, y) => x + y)));
   };
 
   return (
@@ -96,10 +100,10 @@ function Card() {
             borderRadius: "50%",
           }}
         >
-          {items.length}
+          {state.length}
         </Typography>
       </div>
-      {items.map((eachProd, index) => (
+      {state.map((eachProd, index) => (
         <Paper
           elevation={3}
           style={{ backgroundColor: "#f6f5f8", marginTop: 30 }}
@@ -159,7 +163,7 @@ function Card() {
                     defaultValue="1"
                   >
                     {Array.from(
-                      { length: stock[index] },
+                      { length: state3[index] },
                       (_, index) => index + 1
                     ).map((quan, index1) => (
                       <option value={quan} key={index1}>

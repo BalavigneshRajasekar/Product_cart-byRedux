@@ -1,20 +1,22 @@
 /* eslint-disable no-unused-vars */
 import { createSlice } from "@reduxjs/toolkit";
-
+import data from "./products.json";
+const IndividualPrice = data.products.map((item) => item.price);
 const dataProvider = createSlice({
   name: "name",
   initialState: {
-    items: [],
-    stocks: [],
-    totalPrice: 0,
+    items: data.products,
+    stocks: data.products.map((item) => item.stock),
+    totalPrice: IndividualPrice.reduce((x, y) => x + y),
   },
   reducers: {
     addItem: (state, action) => {
-      state.items.push(action.payload);
+      console.log(action);
+      state.items = action.payload;
     },
-    removeItem: (state, action) => {
-      state.items = state.items.filter((item) => item.id !== action.payload.id);
-      state.totalPrice -= action.payload.price;
+    price: (state, action) => {
+      console.log(action);
+      state.totalPrice = action.payload;
     },
     addStock: (state, action) => {
       state.stocks.push(action.payload);
@@ -27,7 +29,6 @@ const dataProvider = createSlice({
   },
 });
 
-export const { addItem, removeItem, addStock, removeStock } =
-  dataProvider.actions;
+export const { addItem, price, addStock, removeStock } = dataProvider.actions;
 
 export default dataProvider.reducer;

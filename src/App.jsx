@@ -1,6 +1,6 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { DataProvider } from "./UserContext";
+// import { DataProvider } from "./UserContext";
 import Card from "./Card";
 import TotalCart from "./TotalCart";
 import { Provider } from "react-redux";
@@ -11,10 +11,8 @@ function App() {
     <>
       <div>
         <Provider store={store}>
-          <DataProvider>
-            <Card></Card>
-            <TotalCart></TotalCart>
-          </DataProvider>
+          <Card></Card>
+          <TotalCart></TotalCart>
         </Provider>
       </div>
     </>

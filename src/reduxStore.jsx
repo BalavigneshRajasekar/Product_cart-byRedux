@@ -4,7 +4,7 @@ import data from "./createSlice";
 
 const store = configureStore({
   reducer: {
-    counter: data,
+    store: data,
   },
 });
 
