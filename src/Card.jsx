@@ -17,9 +17,12 @@ import { Delete } from "@mui/icons-material";
 import { addItem, price } from "./createSlice";
 
 function Card() {
-  const state = useSelector((value) => value.store.items);
-  const state1 = useSelector((value) => value.store.totalPrice);
-  const state3 = useSelector((value) => value.store.stocks);
+  //State values from the store
+  const items = useSelector((value) => value.store.items);
+  const totalPrice = useSelector((value) => value.store.totalPrice);
+  const stocks = useSelector((value) => value.store.stocks);
+
+  // Help to update the state
   const dispatch = useDispatch();
 
   //Images which are provided in data its not working that y used custom images
@@ -33,14 +36,14 @@ function Card() {
 
   const handleChange = (e, id, eachPrice, index) => {
     //This Logic will help us to add the Subtotal value to the object
-    let updatedPrice = state.map((value) => {
+    let updatedPrice = items.map((value) => {
       if (value.id == id) {
         return { ...value, ["subTotal"]: e.target.value * eachPrice };
       }
       return value;
     });
 
-    console.log(state);
+    console.log(items);
     dispatch(addItem(updatedPrice));
 
     //This Logic will help us to add the Total value of already existing cart and new increased quantity
@@ -53,16 +56,16 @@ function Card() {
 
     //TotalPrice
     dispatch(price(total.reduce((x, y) => x + y)));
-    console.log(state1);
+    console.log(totalPrice);
   };
 
   const handleRemove = (id) => {
     //Remove the cart based on the ID
 
-    dispatch(addItem(state.filter((f) => f.id !== id)));
+    dispatch(addItem(items.filter((f) => f.id !== id)));
 
     // This logic is help us to handle the TotalPrice after cart is removed
-    let deletedValue = state.map((value) => {
+    let deletedValue = items.map((value) => {
       if (value.id == id) {
         return 0;
       }
@@ -100,10 +103,10 @@ function Card() {
             borderRadius: "50%",
           }}
         >
-          {state.length}
+          {items.length}
         </Typography>
       </div>
-      {state.map((eachProd, index) => (
+      {items.map((eachProd, index) => (
         <Paper
           elevation={3}
           style={{ backgroundColor: "#f6f5f8", marginTop: 30 }}
@@ -163,7 +166,7 @@ function Card() {
                     defaultValue="1"
                   >
                     {Array.from(
-                      { length: state3[index] },
+                      { length: stocks[index] },
                       (_, index) => index + 1
                     ).map((quan, index1) => (
                       <option value={quan} key={index1}>
