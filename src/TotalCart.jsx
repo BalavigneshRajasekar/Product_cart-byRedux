@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useContext } from "react";
+
 import {
   CardActions,
   CardContent,
@@ -9,7 +9,7 @@ import {
   Button,
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import userContext from "./UserContext";
+
 import { useSelector } from "react-redux";
 function TotalCart() {
   const totalPrice = useSelector((value) => value.store.totalPrice);
