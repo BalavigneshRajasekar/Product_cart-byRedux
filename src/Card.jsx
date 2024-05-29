@@ -14,12 +14,12 @@ import {
   Divider,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
-import { addItem, price, removeStock } from "./createSlice";
+import { addItem, removeItem } from "./createSlice";
 
 function Card() {
   //State values from the store
   const items = useSelector((value) => value.store.items);
-  const totalPrice = useSelector((value) => value.store.totalPrice);
+
   const stocks = useSelector((value) => value.store.stocks);
 
   // Help to update the state
@@ -35,51 +35,12 @@ function Card() {
   ];
 
   const handleChange = (e, id, eachPrice, index) => {
-    //This Logic will help us to add the Subtotal value to the object
-    let updatedPrice = items.map((value) => {
-      if (value.id == id) {
-        return { ...value, ["subTotal"]: e.target.value * eachPrice };
-      }
-      return value;
-    });
-
+    dispatch(addItem({ value: e.target.value, id, eachPrice, index }));
     console.log(items);
-    dispatch(addItem(updatedPrice));
-    dispatch(removeStock(e, id, eachPrice, index));
-
-    //This Logic will help us to add the Total value of already existing cart and new increased quantity
-    let total = updatedPrice.map((value, i) => {
-      if (i == index) {
-        return value.subTotal;
-      }
-      return value.subTotal ? value.subTotal : value.price;
-    });
-
-    dispatch(price(total.reduce((x, y) => x + y))); //TotalPrice
-    console.log(totalPrice);
   };
 
   const handleRemove = (id) => {
-    //Remove the cart based on the ID
-
-    dispatch(addItem(items.filter((f) => f.id !== id)));
-
-    // This logic is help us to handle the TotalPrice after cart is removed
-    let deletedValue = items.map((value) => {
-      if (value.id == id) {
-        return 0;
-      }
-
-      return value.subTotal
-        ? value == 0
-          ? 0
-          : value.subTotal
-        : value == 0
-        ? 0
-        : value.price;
-    });
-
-    dispatch(price(deletedValue.reduce((x, y) => x + y)));
+    dispatch(removeItem({ id }));
   };
 
   return (
